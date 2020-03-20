@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/EricASC6/auth-oauth-login#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",

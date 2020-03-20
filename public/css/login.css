@@ -1,0 +1,36 @@
+:root {
+  --top-bottom-padding: 25px;
+}
+
+.logo-head {
+  padding-top: var(--top-bottom-padding);
+  color: var(--logo-color);
+}
+
+.logo-head h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.heading h3 {
+  font-size: 1.25rem;
+  color: var(--black);
+  width: 100px;
+}
+
+.form-container {
+  flex: 2;
+}
+
+.form-container .form {
+  height: 100%;
+}
+
+.form-body .form-field input {
+  width: 100%;
+}
+
+.oauth-container {
+  padding-bottom: var(--top-bottom-padding);
+}

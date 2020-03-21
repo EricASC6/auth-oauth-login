@@ -13,53 +13,52 @@
   </head>
   <body>
     <div class="container main-container">
+      <img src="/assets/circle.svg" id="circle" alt="" />
       <div class="container logo-head">
         <h1>LOGO</h1>
       </div>
       <div class="container login-form-container form-container">
         <form class="login-form form">
           <div class="heading login-form-heading">
-            <!-- <div class="logo">
+            <div class="logo">
               <img src="/assets/logo.svg" alt="" />
-            </div> -->
+            </div>
             <h3>Welcome Back</h3>
           </div>
           <div class="form-body login-form-body">
-            <div class="form-field email-field">
-              <label for="username">
-                <div class="field-head username-head">
-                  <i class="far fa-envelope"></i>
+            <div class="form-fields">
+              <div class="form-field email-field">
+                <label for="username" class="input-label">
+                  <i class="far fa-envelope label-icon"></i>
                   <h6>Email</h6>
-                </div>
-              </label>
-              <input type="text" id="username" />
-            </div>
-            <div class="form-field password-field">
-              <label for="password">
-                <div class="field-head passwrord-head">
-                  <i class="far fa-keyboard"></i>
+                </label>
+                <input type="text" id="username" />
+              </div>
+              <div class="form-field password-field">
+                <label for="password" class="input-label">
+                  <i class="far fa-keyboard label-icon"></i>
                   <h6>Password</h6>
-                </div>
-              </label>
-              <input type="text" id="password" />
+                </label>
+                <input type="text" id="password" />
+              </div>
             </div>
-          </div>
-          <div class="form-btns">
-            <a href="#" class="login-btn">Login</a>
-            <a href="#" class="signup-btn">Sign Up</a>
+            <div class="form-btns">
+              <a href="#" class="login-btn form-btn main-btn">Login</a>
+              <a href="#" class="signup-btn form-btn secondary-btn">Sign Up</a>
+            </div>
           </div>
         </form>
       </div>
+      <div class="container option">
+        <h3>or login with</h3>
+      </div>
       <div class="container oauth-container oauth-login">
-        <div class="oauth-head">
-          <h3>or login with</h3>
-        </div>
         <div class="oauth-btns">
           <a href="#" class="oauth-btn" id="google"
-            ><i class="fab fa-google"></i>Google</a
+            ><i class="fab fa-google"></i> Google</a
           >
           <a href="#" class="oauth-btn" id="facebook"
-            ><i class="fab fa-facebook-f"></i>Facebook</a
+            ><i class="fab fa-facebook-f"></i> Facebook</a
           >
         </div>
       </div>

@@ -1,16 +1,32 @@
 :root {
   --top-bottom-padding: 25px;
+  --top-bottom-margin: 25px;
+}
+
+#circle {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
 }
 
 .logo-head {
+  position: relative;
   padding-top: var(--top-bottom-padding);
+  padding-bottom: var(--top-bottom-padding);
   color: var(--logo-color);
+  z-index: 3;
 }
 
 .logo-head h1 {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
   text-align: center;
+}
+
+.form .heading {
+  width: 100%;
+  padding-bottom: var(--top-bottom-padding);
 }
 
 .heading h3 {
@@ -20,17 +36,111 @@
 }
 
 .form-container {
-  flex: 2;
+  /* flex: 2; */
+  padding-top: var(--top-bottom-padding);
+  padding-bottom: var(--top-bottom-padding);
 }
 
 .form-container .form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
   height: 100%;
 }
 
-.form-body .form-field input {
+.form .form-body {
   width: 100%;
 }
 
+.form-fields .form-field {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.form-field .input-label {
+  display: flex;
+  align-items: center;
+  color: var(--dark-gray);
+  font-size: 1.25rem;
+  margin-bottom: 5px;
+}
+
+.input-label .label-icon {
+  margin-right: 5px;
+}
+
+.form-fields .form-field::before {
+  position: absolute;
+  content: "";
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+  background-color: var(--light-gray);
+}
+
+.form-fields .form-field input {
+  width: 100%;
+  font-size: 1rem;
+  color: var(--black);
+  padding: 0.25rem 0.25rem 0.25rem 0;
+  border: none;
+  outline: none;
+}
+
+.form .form-btns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--top-bottom-padding);
+}
+
+.form-btns .main-btn {
+  padding: 0.5rem 1.5rem;
+  color: white;
+  border-radius: 25px;
+  background-color: var(--primary-purple);
+  text-decoration: none;
+}
+
+.form-btns .secondary-btn {
+  color: var(--logo-color);
+}
+
+.option h3 {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--dark-gray);
+}
+
 .oauth-container {
+  padding-top: var(--top-bottom-padding);
   padding-bottom: var(--top-bottom-padding);
+}
+
+.oauth-container .oauth-btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.oauth-btns .oauth-btn {
+  width: 100%;
+  padding: 0.65rem 1.5rem;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 25px;
+}
+
+.oauth-btns #google {
+  background-color: var(--google-red);
+}
+
+.oauth-btns #facebook {
+  margin-top: 20px;
+  background-color: var(--facebook-blue);
 }

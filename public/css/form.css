@@ -3,13 +3,6 @@
   --top-bottom-margin: 15px;
 }
 
-#circle {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  right: 0;
-}
-
 .logo-head {
   position: relative;
   width: 100%;
@@ -26,8 +19,10 @@
 }
 
 .form .heading {
+  position: relative;
   width: 100%;
   padding-bottom: var(--top-bottom-padding);
+  z-index: 4;
 }
 
 .heading h3 {
@@ -42,15 +37,28 @@
 }
 
 .heading p {
-  font-size: 1rem;
+  font-size: 0.85rem;
   color: var(--dark-gray);
 }
 
 .form-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+  border-radius: 3px;
+  height: 100%;
+}
+
+.form-container #circle {
+  position: absolute;
+  z-index: 2;
+  width: 200px;
+  height: 200px;
+  top: -50px;
+  right: -50px;
 }
 
 .form-shell {
@@ -212,23 +220,84 @@
     height: auto;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: minmax(auto, 750px);
   }
 
   .about-container {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
     width: 100%;
-    background-color: var(--primary-purple);
+    background-color: #ab97f9;
     border-radius: 25px 10px 10px 25px;
+    text-align: center;
+    overflow: hidden;
   }
 
-  .form-container {
-    width: 100%;
-    height: 100%;
+  .about-container .design {
+    position: absolute;
+  }
+
+  .about-container .hollow-square {
+    bottom: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    border: 10px solid #c9bbfe;
+    transform: rotate(45deg);
+  }
+
+  .about-container .hollow-circle {
+    top: -25px;
+    left: -25px;
+    width: 150px;
+    height: 150px;
+    border: 10px solid #c9bbfe;
+    border-radius: 50%;
+  }
+
+  .about-container #d2 {
+    top: 490px;
+    right: 55px;
+    width: 50px;
+    height: 50px;
+    border-width: 8px;
+  }
+
+  .about-container #d4 {
+    background-color: #b9a8fd;
+    width: 200px;
+    height: 200px;
+    border: none;
+    top: 100%;
+    left: 0;
+    transform: translateY(-75%) translateX(-50px);
+  }
+
+  .about-head h1 {
+    color: var(--logo-color);
+  }
+
+  .about-container .about-body {
+    padding: 15px 0;
+  }
+
+  .about-body p {
+    color: var(--black);
+    font-size: 0.85rem;
+    line-height: 150%;
+  }
+
+  .about-body .about-action-btn {
+    display: inline-block;
+    color: var(--logo-color);
+    margin-top: 15px;
+    padding: 0.5rem 1.5rem;
+    text-decoration: none;
+    border: 2px solid var(--logo-color);
+    border-radius: 25px;
   }
 
   .oauth-container .oauth-btns {

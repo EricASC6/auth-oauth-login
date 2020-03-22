@@ -12,7 +12,7 @@
   /* sizes */
   --main-container-width: 100%;
   --main-container-height: 100%;
-  --container-width: 768px;
+  --container-width: 1024px;
 }
 
 * {
@@ -34,12 +34,13 @@ body {
   height: 100%;
 }
 
-.container.main-container {
+#app {
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: var(--main-container-width);
+  max-width: var(--main-container-width);
   height: var(--main-container-height);
   padding: 0;
 }
@@ -58,4 +59,14 @@ body {
   margin: 0 auto;
   padding: 0 25px;
   max-width: var(--container-width);
+}
+
+@media screen and (min-width: 1440px) {
+  :root {
+    --container-width: 1350px;
+  }
+
+  html {
+    font-size: 100px;
+  }
 }

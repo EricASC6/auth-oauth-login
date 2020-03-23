@@ -6,9 +6,18 @@ dotenv.config();
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
+const passport = require("passport");
 const accountRoutes = require("./routes/account-routes");
+const authRoutes = require("./auth/auth-routes");
+const local = require("./auth/configs/local");
+
+// configuring passport
+local.config();
 
 const app = express();
+
+// initialize passport
+app.use(passport.initialize());
 
 // set up ejs
 app.set("view engine", "ejs");
@@ -26,6 +35,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // routes
 app.use("/account", accountRoutes);
+app.use("/auth", authRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log("listening on port 3000"));

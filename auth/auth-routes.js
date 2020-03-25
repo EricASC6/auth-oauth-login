@@ -10,9 +10,16 @@ router.get("/auth/error", (req, res) => {
   res.status(403).json("Failed to login");
 });
 
-router.post("/signup", localAuth.signUp, (req, res) => {
-  res.json("testing...");
-});
+router.post(
+  "/signup",
+  localAuth.signUp,
+  localAuth.createToken(),
+  (req, res) => {
+    console.log(req.token);
+    res.cookie("user_id", req.token);
+    res.json("testing...");
+  }
+);
 
 router.post(
   "/login",
@@ -22,7 +29,7 @@ router.post(
   }),
   localAuth.createToken(),
   (req, res) => {
-    console.log("token: ", req.token);
+    res.cookie("user_id", req.token);
     res.json({ token: req.token });
   }
 );

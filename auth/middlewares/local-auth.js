@@ -15,8 +15,9 @@ module.exports = {
     else {
       // create new user and store in the database
       const newUser = new User({ email, password });
-      const user = await newUser.save();
-      return res.json(user);
+      await newUser.hashPassword();
+      req.user = await newUser.save();
+      next();
     }
   },
 

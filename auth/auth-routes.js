@@ -17,7 +17,7 @@ router.post(
   (req, res) => {
     console.log(req.token);
     res.cookie("user_id", req.token);
-    res.json("testing...");
+    res.json("created new user");
   }
 );
 
@@ -30,7 +30,8 @@ router.post(
   localAuth.createToken(),
   (req, res) => {
     res.cookie("user_id", req.token);
-    res.json({ token: req.token });
+    res.render("dashboard");
+    // res.json({ token: req.token });
   }
 );
 

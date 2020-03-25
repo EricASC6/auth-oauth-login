@@ -14,22 +14,22 @@ const userSchema = new Schema({
   }
 });
 
-userSchema.methods.hashPassword = async function() {
+userSchema.statics.hashPassword = async function(password) {
   try {
-    const password = this.password;
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
-    console.log("normal passwd", password);
-    console.log("hashed passwd", passwordHash);
-
-    this.password = passwordHash;
+    return passwordHash;
   } catch (err) {
     return err;
   }
 };
 
-userSchema.methods.isValidPassword = async function() {
-  // compare the plain text passwd with the hashed one
+userSchema.methods.isValidPassword = async function(password) {
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (err) {
+    return err;
+  }
 };
 
 const User = mongoose.model("user", userSchema);

@@ -14,8 +14,8 @@ module.exports = {
       return res.json("existing user, please login into your account");
     else {
       // create new user and store in the database
-      const newUser = new User({ email, password });
-      await newUser.hashPassword();
+      const passwordHash = await User.hashPassword(password);
+      const newUser = new User({ email, password: passwordHash });
       req.user = await newUser.save();
       next();
     }

@@ -10,17 +10,12 @@ module.exports = {
           usernameField: "email"
         },
         async (email, password, done) => {
-          // find the user with the email
           const user = await User.findOne({ email });
-
-          // if the email doesn't exists -> error
           if (!user) done(null, false);
 
-          // if email exists but password is incorrect -> error
-          if (password != user.password) done(null, false);
-
-          // return user
-          done(null, user);
+          const isValidPassword = await user.isValidPassword(password);
+          if (!isValidPassword) done(null, false);
+          else done(null, user);
         }
       )
     );

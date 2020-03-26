@@ -7,23 +7,32 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const passport = require("passport");
+const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const accountRoutes = require("./routes/account-routes");
 const authRoutes = require("./auth/auth-routes");
+const local = require("./auth/configs/local");
 
-// creating express app
 const app = express();
 
-// using cookie-parser
+app.use(
+  session({
+    secret: "secret",
+    name: "id",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {}
+  })
+);
 app.use(cookieParser());
-
-// initialize passport
 app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.static(path.join(__dirname, "public")));
 
-// set up ejs
+local.configure(passport);
+
 app.set("view engine", "ejs");
 
-// Connect to mongodb
 const DB_URL = process.env.DB_URL;
 const db = mongoose.connection;
 
@@ -31,12 +40,10 @@ mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 db.once("open", () => console.log(`connected to ${DB_URL}`));
 db.on("error", err => console.log(`connection error: ${err}`));
 
-// static routes
-app.use(express.static(path.join(__dirname, "public")));
-
-// routes
 app.get("/", (req, res) => {
-  res.render("dashboard");
+  res.render("dashboard", {
+    user: req.user
+  });
 });
 app.use("/account", accountRoutes);
 app.use("/auth", authRoutes);

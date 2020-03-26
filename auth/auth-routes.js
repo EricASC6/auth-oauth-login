@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const localAuth = require("./middlewares/local-auth");
 
-router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 
 // testing route only
 router.get("/auth/error", (req, res) => {
@@ -15,9 +15,7 @@ router.post(
   localAuth.signUp,
   localAuth.createToken(),
   (req, res) => {
-    console.log(req.token);
-    res.cookie("user_id", req.token);
-    res.json("created new user");
+    res.redirect("/");
   }
 );
 
@@ -29,9 +27,7 @@ router.post(
   }),
   localAuth.createToken(),
   (req, res) => {
-    res.cookie("user_id", req.token);
-    res.render("dashboard");
-    // res.json({ token: req.token });
+    res.redirect("/");
   }
 );
 

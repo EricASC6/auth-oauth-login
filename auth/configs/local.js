@@ -10,10 +10,15 @@ module.exports = {
           usernameField: "email"
         },
         async (email, password, done) => {
+          console.log(email, password);
+
           const user = await User.findOne({ email });
+          console.log("user", user);
+
           if (!user) done(null, false);
 
           const isValidPassword = await user.isValidPassword(password);
+          console.log(isValidPassword);
           if (!isValidPassword) done(null, false);
           else done(null, user);
         }

@@ -24,6 +24,7 @@ module.exports = {
   createToken() {
     return (req, res, next) => {
       const JWT_SECRET = process.env.JWT_SECRET;
+      console.log(req.user);
       const { _id, email } = req.user;
       const payload = JSON.stringify({ sub: _id, email });
       const token = jwt.sign(payload, JWT_SECRET);

@@ -39,6 +39,9 @@ db.on("error", err => console.log(`connection error: ${err}`));
 app.use(express.static(path.join(__dirname, "public")));
 
 // routes
+app.get("/", (req, res) => {
+  res.render("dashboard");
+});
 app.use("/account", accountRoutes);
 app.use("/auth", authRoutes);
 

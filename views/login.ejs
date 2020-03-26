@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/form.css" />
+    <script defer src="/js/login.js"></script>
     <script
       src="https://kit.fontawesome.com/bc308bbd0b.js"
       crossorigin="anonymous"
@@ -41,7 +42,7 @@
         <div class="form-container container">
           <!-- <img src="/assets/circle.svg" id="circle" alt="" /> -->
           <div class="login-form-container form-shell">
-            <form class="login-form form">
+            <form action="/auth/login" method="POST" class="login-form form">
               <div class="heading login-form-heading">
                 <div class="logo">
                   <img src="/assets/logo.svg" alt="" />
@@ -52,22 +53,28 @@
               <div class="form-body login-form-body">
                 <div class="form-fields">
                   <div class="form-field email-field">
-                    <label for="username" class="input-label">
+                    <label for="email" class="input-label">
                       <i class="far fa-envelope label-icon"></i>
                       <h6>Email</h6>
                     </label>
-                    <input type="text" id="username" />
+                    <input type="text" id="email" name="email" />
                   </div>
                   <div class="form-field password-field">
                     <label for="password" class="input-label">
                       <i class="far fa-keyboard label-icon"></i>
                       <h6>Password</h6>
                     </label>
-                    <input type="text" id="password" />
+                    <input type="password" id="password" name="password" />
                   </div>
                 </div>
                 <div class="form-btns">
-                  <a href="#" class="login-btn form-btn main-btn">Login</a>
+                  <button
+                    id="login-btn"
+                    class="form-btn main-btn"
+                    type="submit"
+                  >
+                    Login
+                  </button>
                   <a
                     href="/account/signup"
                     class="signup-btn form-btn secondary-btn"

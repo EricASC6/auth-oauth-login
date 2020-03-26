@@ -10,10 +10,6 @@ const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const accountRoutes = require("./routes/account-routes");
 const authRoutes = require("./auth/auth-routes");
-const local = require("./auth/configs/local");
-
-// configuring passport
-local.config();
 
 // creating express app
 const app = express();

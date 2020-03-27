@@ -24,14 +24,6 @@ userSchema.statics.hashPassword = async function(password) {
   }
 };
 
-userSchema.methods.isValidPassword = async function(password) {
-  try {
-    return await bcrypt.compare(password, this.password);
-  } catch (err) {
-    return err;
-  }
-};
-
 const User = mongoose.model("user", userSchema);
 
 module.exports = User;

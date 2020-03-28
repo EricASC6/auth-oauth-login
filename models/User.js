@@ -11,6 +11,9 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: false
+  },
+  sessionId: {
+    type: String
   }
 });
 
@@ -19,6 +22,15 @@ userSchema.statics.hashPassword = async function(password) {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
     return passwordHash;
+  } catch (err) {
+    return err;
+  }
+};
+
+userSchema.methods.isValidPassword = async function(password) {
+  try {
+    const isValid = await bcrypt.compare(password, this.password);
+    return isValid;
   } catch (err) {
     return err;
   }

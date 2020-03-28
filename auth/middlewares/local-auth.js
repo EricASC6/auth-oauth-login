@@ -2,7 +2,7 @@ const User = require("../../models/User");
 
 module.exports = {
   signUp() {
-    return async (req, res, next) => {
+    return async (req, res) => {
       console.log("Signing Up");
 
       // get email & password from request

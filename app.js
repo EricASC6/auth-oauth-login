@@ -25,11 +25,14 @@ db.on("error", err => console.log(`connection error: ${err}`));
 
 const app = express();
 
+const sessionStore = new MongoStore({
+  mongooseConnection: mongoose.connection
+});
 app.use(
   session({
     secret: SECRET,
     name: "id",
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    store: sessionStore,
     resave: false,
     saveUninitialized: false,
     cookie: {}
@@ -44,6 +47,7 @@ app.use((req, res, next) => {
   if (authenticated) {
     res.locals.user = req.user;
   } else {
+    res.locals.user = null;
     res.clearCookie("id");
   }
 
@@ -55,6 +59,8 @@ local.configure(passport);
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
+  console.log(req.user);
+  if (!req.user) return res.redirect("/account/login");
   res.render("dashboard");
 });
 app.use("/account", accountRoutes);

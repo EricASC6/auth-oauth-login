@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/navbar.css" />
     <link rel="stylesheet" href="/css/form.css" />
     <script src="/js/signup.js" defer></script>
     <script
@@ -14,11 +15,7 @@
   </head>
   <body>
     <div class="container main-container" id="app">
-      <nav>
-        <div class="nav-container container">
-          <div class="logo"><h1>LOGO</h1></div>
-        </div>
-      </nav>
+      <%- include ("partials/navbar") %>
       <div class="containers">
         <div class="about-container container">
           <div class="design hollow-square" id="d1"></div>

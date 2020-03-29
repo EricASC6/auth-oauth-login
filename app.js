@@ -28,6 +28,7 @@ const app = express();
 const sessionStore = new MongoStore({
   mongooseConnection: mongoose.connection
 });
+
 app.use(
   session({
     secret: SECRET,
@@ -59,7 +60,6 @@ local.configure(passport);
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  console.log(req.user);
   if (!req.user) return res.redirect("/account/login");
   res.render("dashboard");
 });

@@ -12,6 +12,18 @@ const userSchema = new Schema({
     type: String,
     required: false
   },
+  google: {
+    name: {
+      type: String
+    },
+    id: {
+      type: String,
+      unique: true
+    },
+    photo: {
+      type: String
+    }
+  },
   sessionId: {
     type: String
   }

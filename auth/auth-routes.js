@@ -15,4 +15,19 @@ router.post("/signup", localAuth.signUp());
 
 router.post("/login", localAuthenticate);
 
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["openid", "profile", "email"]
+  })
+);
+
+router.get(
+  "/google/redirect",
+  passport.authenticate("google", {
+    failureRedirect: "/account/login",
+    successRedirect: "/"
+  })
+);
+
 module.exports = router;

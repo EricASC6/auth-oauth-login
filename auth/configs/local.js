@@ -1,19 +1,9 @@
+const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("../../models/User");
 
 module.exports = {
-  configure: passport => {
-    passport.serializeUser((user, done) => {
-      const sessionId = user.sessionId;
-      done(null, sessionId);
-    });
-
-    passport.deserializeUser(async (sessionId, done) => {
-      const user = await User.findOne({ sessionId });
-      if (user) done(null, user);
-      else done(null, false);
-    });
-
+  configure: () => {
     passport.use(
       new LocalStrategy(
         {

@@ -44,14 +44,12 @@ app.use(passport.session());
 app.use(cookieParser(SECRET));
 app.use(express.static(path.join(__dirname, "public")));
 app.use((req, res, next) => {
-  const authenticated = req.isAuthenticated();
-  if (authenticated) {
-    res.locals.user = req.user;
-  } else {
+  if (req.isUnauthenticated()) {
     res.locals.user = null;
     res.clearCookie("id");
+  } else {
+    res.locals.user = req.user;
   }
-
   next();
 });
 
@@ -60,8 +58,11 @@ local.configure(passport);
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  if (!req.user) return res.redirect("/account/login");
-  res.render("dashboard");
+  if (req.isAuthenticated()) {
+    res.render("dashboard");
+  } else {
+    res.redirect("/account/login");
+  }
 });
 app.use("/account", accountRoutes);
 app.use("/auth", authRoutes);

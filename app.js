@@ -11,8 +11,8 @@ const path = require("path");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
-const MongoStore = require("connect-mongo")(session);
 const cookieParser = require("cookie-parser");
+const SessionManager = require("./models/Session");
 const accountRoutes = require("./routes/account-routes");
 const authRoutes = require("./auth/auth-routes");
 
@@ -24,15 +24,14 @@ db.on("error", err => console.log(`connection error: ${err}`));
 
 const app = express();
 
-const sessionStore = new MongoStore({
-  mongooseConnection: mongoose.connection
-});
+const sessionManager = new SessionManager(db).init(session);
+sessionManager.sessionStore.clear();
 
 app.use(
   session({
     secret: SECRET,
     name: "id",
-    store: sessionStore,
+    store: sessionManager.sessionStore,
     resave: false,
     saveUninitialized: false,
     cookie: {}
@@ -42,6 +41,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser(SECRET));
 app.use(express.static(path.join(__dirname, "public")));
+app.use((req, res, next) => {
+  sessionManager.sessionStore.all((_, sess) => console.log(sess));
+  // make session manager available everywhere
+  req.sessionManager = sessionManager;
+  next();
+});
 app.use((req, res, next) => {
   if (req.isUnauthenticated()) {
     res.locals.user = null;
@@ -59,7 +64,10 @@ require("./auth/configs/serialization").config();
 
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+  const session = await req.sessionManager.getSession(req.signedCookies.id);
+  console.log("session", session);
+
   if (req.isAuthenticated()) {
     res.render("dashboard");
   } else {

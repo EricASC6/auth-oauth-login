@@ -7,7 +7,8 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
-      passReqToCallback: true
+      passReqToCallback: true,
+      session: true
     },
     async (req, email, password, done) => {
       console.log("Signing Up locally");
@@ -27,7 +28,7 @@ passport.use(
         password: passwordHash
       });
 
-      return done(null, newUser.save());
+      return done(null, await newUser.save());
     }
   )
 );
@@ -37,7 +38,8 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
-      passReqToCallback: true
+      passReqToCallback: true,
+      session: true
     },
     async (req, email, password, done) => {
       console.log("logining in locally");

@@ -1,9 +1,10 @@
-const sessionStore = require("connect-mongo");
+const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 
-class Session {
-  static sessionStore = sessionStore;
+const SessionManager = {
+  sessionStore: new MongoStore(session),
 
-  constructor(sessionId) {
-    this.sessionId = sessionId;
-  }
-}
+  async deleteSession(id) {}
+};
+
+module.exports = SessionManager;

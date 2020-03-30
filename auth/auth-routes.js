@@ -1,33 +1,73 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
-const localAuth = require("./middlewares/local-auth");
-
-const localAuthenticate = passport.authenticate("local", {
-  session: true,
-  failureRedirect: "/account/login",
-  successRedirect: "/"
-});
+const Authenticator = require("./authHandler");
 
 router.use(express.urlencoded({ extended: true }));
 
-router.post("/signup", localAuth.signUp());
+// Local Strategy
+const localSignupStategyOptions = {
+  successRedirect: "/",
+  failureRedirect: "/account/signup"
+};
 
-router.post("/login", localAuthenticate);
+const localLoginStrategyOptions = {
+  successRedirect: "/",
+  failureRedirect: "/account/login"
+};
 
-router.get(
-  "/google",
-  passport.authenticate("google", {
-    scope: ["openid", "profile", "email"]
-  })
+const localAuthenticator = new Authenticator("local:signup", "local:login");
+const localSignup = localAuthenticator.signup(localSignupStategyOptions);
+const localLogin = localAuthenticator.login(localLoginStrategyOptions);
+
+router.post("/signup", localSignup);
+router.post("/login", localLogin);
+
+// Google Strategy
+const googleSignupStrategyOptions = {
+  scope: [
+    "https://www.googleapis.com/auth/userinfo.profile",
+    "https://www.googleapis.com/auth/userinfo.email"
+  ],
+  accessType: "offline",
+  approvalPrompt: "force",
+  ...localSignupStategyOptions
+};
+
+const googleLoginStrategyOptions = {
+  scope: [
+    "https://www.googleapis.com/auth/userinfo.profile",
+    "https://www.googleapis.com/auth/userinfo.email"
+  ],
+  accessType: "offline",
+  approvalPrompt: "force",
+  ...localLoginStrategyOptions
+};
+
+const googleAuthenticator = new Authenticator("google:signup", "google:login");
+const googleSignup = googleAuthenticator.signup(googleSignupStrategyOptions);
+const googleLogin = googleAuthenticator.login(googleLoginStrategyOptions);
+
+router.get("/google/signup", googleSignup);
+router.get("/google/signup/redirect", googleSignup);
+router.get("/google/login", googleLogin);
+router.get("/google/login/redirect", googleLogin);
+
+// Facebook Strategy
+const facebookStrategySignupOptions = {
+  scope: ["emails"],
+  ...localSignupStategyOptions
+};
+
+const facebookAuthenticator = new Authenticator(
+  "facebook:signup",
+  "facebook:login"
 );
 
-router.get(
-  "/google/redirect",
-  passport.authenticate("google", {
-    failureRedirect: "/account/login",
-    successRedirect: "/"
-  })
+const facebookSignup = facebookAuthenticator.signup(
+  facebookStrategySignupOptions
 );
+
+router.get("/facebook/signup", facebookSignup);
+router.get("/facebook/signup/redirect", facebookSignup);
 
 module.exports = router;

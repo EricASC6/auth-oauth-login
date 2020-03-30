@@ -15,8 +15,6 @@ const MongoStore = require("connect-mongo")(session);
 const cookieParser = require("cookie-parser");
 const accountRoutes = require("./routes/account-routes");
 const authRoutes = require("./auth/auth-routes");
-const local = require("./auth/configs/local");
-const google = require("./auth/configs/google");
 const serialization = require("./auth/configs/serialization");
 
 const db = mongoose.connection;
@@ -55,9 +53,10 @@ app.use((req, res, next) => {
   next();
 });
 
-local.configure();
-google.configure();
-serialization.configure();
+require("./auth/configs/local");
+require("./auth/configs/google");
+require("./auth/configs/facebook");
+serialization.config();
 
 app.set("view engine", "ejs");
 

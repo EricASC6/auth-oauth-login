@@ -70,4 +70,7 @@ const facebookSignup = facebookAuthenticator.signup(
 router.get("/facebook/signup", facebookSignup);
 router.get("/facebook/signup/redirect", facebookSignup);
 
+const logout = localAuthenticator.logout();
+router.get("/logout", logout);
+
 module.exports = router;

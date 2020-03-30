@@ -28,13 +28,11 @@ class SessionManager {
   async getSession(id) {
     return await new Promise((resolve, reject) => {
       this.sessionStore.get(id, (err, session) => {
-        if (error) reject(err);
+        if (err) reject(err);
         else resolve(session);
       });
     });
   }
-
-  deleteSession(id) {}
 
   insertDataInSession(id, data) {}
 }

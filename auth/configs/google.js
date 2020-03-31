@@ -25,32 +25,37 @@ passport.use(
         photos: [{ value: photo }]
       } = profile;
 
-      const existingUser = await User.findOne({ email: email });
+      try {
+        const existingUser = await User.findOne({ email: email });
 
-      if (existingUser && !existingUser.strategy.includes("google")) {
-        existingUser.strategy.push("google");
-        existingUser.google = {
-          name: displayName,
-          id: id,
-          photo: photo
-        };
+        if (existingUser && existingUser.strategy.includes("google")) {
+          return done(null, false);
+        } else if (existingUser) {
+          existingUser.strategy.push("google");
+          existingUser.google = {
+            name: displayName,
+            id: id,
+            photo: photo
+          };
 
-        return done(null, existingUser.save());
-      } else if (existingUser) {
-        return done(null, false);
-      }
-
-      const newUser = new User({
-        strategy: ["google"],
-        email: email,
-        google: {
-          name: displayName,
-          id: id,
-          photo: photo
+          return done(null, await existingUser.save());
         }
-      });
 
-      return done(null, await newUser.save());
+        const newUser = new User({
+          strategy: ["google"],
+          email: email,
+          google: {
+            name: displayName,
+            id: id,
+            photo: photo
+          }
+        });
+
+        return done(null, await newUser.save());
+      } catch (err) {
+        console.log("ERROR: ", err);
+        done(null, false);
+      }
     }
   )
 );
@@ -77,14 +82,19 @@ passport.use(
       console.log("id", id);
       console.log("email", email);
 
-      // look up user in db
-      const existingUser = await User.findOne({ email, "google.id": id });
+      try {
+        // look up user in db
+        const existingUser = await User.findOne({ email, "google.id": id });
 
-      // if user exists, move on to the next phase of auth
-      if (existingUser) return done(null, existingUser);
+        // if user exists, move on to the next phase of auth
+        if (existingUser) return done(null, existingUser);
 
-      // else error
-      return done(null, false);
+        // else error
+        return done(null, false);
+      } catch (err) {
+        console.log("ERROR: ", err);
+        done(null, false);
+      }
     }
   )
 );

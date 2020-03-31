@@ -9,8 +9,7 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   password: {
     type: String,
@@ -21,8 +20,7 @@ const userSchema = new Schema({
       type: String
     },
     id: {
-      type: String,
-      unique: true
+      type: String
     },
     photo: {
       type: String
@@ -33,8 +31,7 @@ const userSchema = new Schema({
       type: String
     },
     id: {
-      type: String,
-      unique: true
+      type: String
     },
     photo: {
       type: String

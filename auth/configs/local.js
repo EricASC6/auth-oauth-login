@@ -7,28 +7,36 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
-      passReqToCallback: true,
-      session: true
+      passReqToCallback: true
     },
     async (req, email, password, done) => {
       console.log("Signing Up locally");
       console.log("email", email);
       console.log("password", password);
 
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        console.log("existing user");
-        return done(null, false);
+      try {
+        const existingUser = await User.findOne({ email });
+        if (existingUser && existingUser.strategy.includes("local")) {
+          console.log("existing user");
+          return done(null, false);
+        } else if (existingUser) {
+          existingUser.strategy.push("local");
+          existingUser.password = await User.hashPassword(password);
+          return done(null, await existingUser.save());
+        }
+
+        const passwordHash = await User.hashPassword(password);
+        const newUser = new User({
+          strategy: ["local"],
+          email: email,
+          password: passwordHash
+        });
+
+        return done(null, await newUser.save());
+      } catch (err) {
+        console.log("ERROR: ", err);
+        done(null, false);
       }
-
-      const passwordHash = await User.hashPassword(password);
-      const newUser = new User({
-        strategy: ["local"],
-        email: email,
-        password: passwordHash
-      });
-
-      return done(null, await newUser.save());
     }
   )
 );
@@ -38,25 +46,29 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
-      passReqToCallback: true,
-      session: true
+      passReqToCallback: true
     },
     async (req, email, password, done) => {
       console.log("logining in locally");
       console.log("email", email);
       console.log("password", password);
 
-      // Look up user with the email in the db
-      const user = await User.findOne({ email });
-      // Handle if user does not exists
-      if (!user) return done(null, false);
+      try {
+        // Look up user with the email in the db
+        const user = await User.findOne({ email });
+        // Handle if user does not exists
+        if (!user) return done(null, false);
 
-      // Authenticate with password
-      const isValidPassword = await user.isValidPassword(password);
+        // Authenticate with password
+        const isValidPassword = await user.isValidPassword(password);
 
-      if (!isValidPassword) return done(null, false);
+        if (!isValidPassword) return done(null, false);
 
-      return done(null, user);
+        return done(null, user);
+      } catch (err) {
+        console.log("ERROR: ", err);
+        done(null, false);
+      }
     }
   )
 );

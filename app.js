@@ -11,27 +11,34 @@ const path = require("path");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 const cookieParser = require("cookie-parser");
-const SessionManager = require("./models/Session");
 const accountRoutes = require("./routes/account-routes");
 const authRoutes = require("./auth/auth-routes");
+require("./auth/configs/local");
+require("./auth/configs/google");
+require("./auth/configs/serialization").config();
 
 const db = mongoose.connection;
 
-mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(DB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 db.once("open", () => console.log(`connected to ${DB_URL}`));
 db.on("error", err => console.log(`connection error: ${err}`));
 
 const app = express();
+app.set("view engine", "ejs");
 
-const sessionManager = new SessionManager(db).init(session);
-sessionManager.sessionStore.clear();
-
+app.use(cookieParser(SECRET));
 app.use(
   session({
     secret: SECRET,
     name: "id",
-    store: sessionManager.sessionStore,
+    store: new MongoStore({
+      mongooseConnection: db
+    }),
     resave: false,
     saveUninitialized: false,
     cookie: {}
@@ -39,40 +46,28 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cookieParser(SECRET));
 app.use(express.static(path.join(__dirname, "public")));
-app.use((req, res, next) => {
-  sessionManager.sessionStore.all((_, sess) => console.log(sess));
-  // make session manager available everywhere
-  req.sessionManager = sessionManager;
-  next();
-});
+
 app.use((req, res, next) => {
   if (req.isUnauthenticated()) {
+    console.log("USER IS NOT AUTHENTICATED");
     res.locals.user = null;
     res.clearCookie("id");
   } else {
+    console.log("USER IS AUTHENTICATED");
     res.locals.user = req.user;
   }
   next();
 });
 
-require("./auth/configs/local");
-require("./auth/configs/google");
-require("./auth/configs/facebook");
-require("./auth/configs/serialization").config();
+const isAuthenticated = async (req, res, next) => {
+  console.log("cookie id", req.signedCookies.id);
+  if (req.isAuthenticated()) return next();
+  return res.redirect("/account/login");
+};
 
-app.set("view engine", "ejs");
-
-app.get("/", async (req, res) => {
-  const session = await req.sessionManager.getSession(req.signedCookies.id);
-  console.log("session", session);
-
-  if (req.isAuthenticated()) {
-    res.render("dashboard");
-  } else {
-    res.redirect("/account/login");
-  }
+app.get("/", isAuthenticated, (req, res) => {
+  res.render("dashboard");
 });
 app.use("/account", accountRoutes);
 app.use("/auth", authRoutes);

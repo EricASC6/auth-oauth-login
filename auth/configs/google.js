@@ -28,7 +28,9 @@ passport.use(
         const existingUser = await User.findOne({ email: email });
 
         if (existingUser && existingUser.strategy.includes("google")) {
-          return done(null, false);
+          return done(null, false, {
+            messsage: "You already have an account, please login"
+          });
         } else if (existingUser) {
           existingUser.strategy.push("google");
           existingUser.google = {
@@ -53,7 +55,9 @@ passport.use(
         return done(null, await newUser.save());
       } catch (err) {
         console.log("ERROR: ", err);
-        done(null, false);
+        done(null, false, {
+          message: "Something went wrong, please try again"
+        });
       }
     }
   )
@@ -88,10 +92,14 @@ passport.use(
         if (existingUser) return done(null, existingUser);
 
         // else error
-        return done(null, false);
+        return done(null, false, {
+          message: "Account does not exist, please sign up"
+        });
       } catch (err) {
         console.log("ERROR: ", err);
-        done(null, false);
+        done(null, false, {
+          message: "Something went wrong, please try again"
+        });
       }
     }
   )

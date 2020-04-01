@@ -37,7 +37,7 @@
         </div>
 
         <div class="form-container container">
-          <!-- <img src="/assets/circle.svg" id="circle" alt="" /> -->
+          <img src="/assets/circle.svg" id="circle" alt="" />
           <div class="signup-form-container form-shell">
             <form
               method="POST"
@@ -96,6 +96,15 @@
               >
             </div>
           </div>
+          <% if (errors) { %>
+          <div class="message-container">
+            <% errors.forEach(error => { %>
+            <div class="error">
+              <p><i class="fas fa-times"></i> &nbsp; <%= error %></p>
+            </div>
+            <% }) %>
+          </div>
+          <% }%>
         </div>
       </div>
     </div>

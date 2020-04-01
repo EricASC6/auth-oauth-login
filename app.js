@@ -13,6 +13,7 @@ const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
 const accountRoutes = require("./routes/account-routes");
 const authRoutes = require("./auth/auth-routes");
 require("./auth/configs/local").config(passport);
@@ -45,11 +46,15 @@ app.use(
     saveUninitialized: false
   })
 );
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, "public")));
 app.use((req, res, next) => {
-  console.log("SESSION ID", req.signedCookies);
+  res.locals.errors = req.flash("error");
+  next();
+});
+app.use((req, res, next) => {
   sessionStore.all((_, sessions) => console.log("sessions: ", sessions));
   console.log("SESSION USER", req.session.user);
   if (req.isAuthenticated()) {
@@ -63,7 +68,6 @@ app.use((req, res, next) => {
 });
 
 const isAuthenticated = (req, res, next) => {
-  console.log("cookie id", req.signedCookies.id);
   if (req.isAuthenticated()) {
     return next();
   }
@@ -73,6 +77,7 @@ const isAuthenticated = (req, res, next) => {
 app.get("/", isAuthenticated, (req, res) => {
   res.render("dashboard");
 });
+
 app.use("/account", accountRoutes);
 app.use("/auth", authRoutes);
 

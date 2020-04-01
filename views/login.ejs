@@ -36,7 +36,7 @@
         </div>
 
         <div class="form-container container">
-          <!-- <img src="/assets/circle.svg" id="circle" alt="" /> -->
+          <img src="/assets/circle.svg" id="circle" alt="" />
           <div class="login-form-container form-shell">
             <form action="/auth/login" method="POST" class="login-form form">
               <div class="heading login-form-heading">
@@ -90,6 +90,15 @@
               >
             </div>
           </div>
+          <% if (errors) { %>
+          <div class="message-container">
+            <% errors.forEach(error => { %>
+            <div class="error">
+              <p><i class="fas fa-times"></i> &nbsp; <%= error %></p>
+            </div>
+            <% }) %>
+          </div>
+          <% }%>
         </div>
       </div>
     </div>

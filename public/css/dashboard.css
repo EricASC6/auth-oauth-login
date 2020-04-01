@@ -1,0 +1,16 @@
+#app {
+  display: block;
+}
+
+.body-container {
+  padding-top: 1rem;
+}
+
+.body-container h1 {
+  color: var(--black);
+}
+
+.body-container h2 {
+  margin-top: 0.5rem;
+  color: var(--dark-gray);
+}

@@ -36,7 +36,7 @@
         </div>
 
         <div class="form-container container">
-          <!-- <img src="/assets/circle.svg" id="circle" alt="" /> -->
+          <img src="/assets/circle.svg" id="circle" alt="" />
           <div class="login-form-container form-shell">
             <form action="/auth/login" method="POST" class="login-form form">
               <div class="heading login-form-heading">
@@ -85,14 +85,20 @@
           </div>
           <div class=" oauth-container oauth-login">
             <div class="oauth-btns">
-              <a href="#" class="oauth-btn" id="google"
+              <a href="/auth/google/login" class="oauth-btn" id="google"
                 ><i class="fab fa-google"></i> Google</a
-              >
-              <a href="#" class="oauth-btn" id="facebook"
-                ><i class="fab fa-facebook-f"></i> Facebook</a
               >
             </div>
           </div>
+          <% if (errors) { %>
+          <div class="message-container">
+            <% errors.forEach(error => { %>
+            <div class="error">
+              <p><i class="fas fa-times"></i> &nbsp; <%= error %></p>
+            </div>
+            <% }) %>
+          </div>
+          <% }%>
         </div>
       </div>
     </div>

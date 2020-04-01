@@ -46,12 +46,18 @@
 }
 
 .form-container #circle {
+  transition: all 250ms ease-in-out;
   position: absolute;
   z-index: 2;
   width: 200px;
   height: 200px;
   top: -50px;
   right: -50px;
+}
+
+.form-container:hover #circle {
+  width: 250px;
+  height: 250px;
 }
 
 .form-shell {
@@ -116,21 +122,32 @@
 }
 
 .form-btns .main-btn {
+  transition: background-color 150ms ease-in;
   padding: 0.5rem 1.5rem;
   color: white;
   font-size: 1rem;
   border-radius: 25px;
   background-color: var(--primary-purple);
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+.form-btns .main-btn:hover {
+  background-color: #7355e7;
 }
 
 .form-btns .secondary-btn {
+  transition: color 150ms ease-in;
   color: var(--logo-color);
+}
+
+.form-btns .secondary-btn:hover {
+  color: var(--primary-purple);
 }
 
 .option {
   width: 100%;
-  /* padding-top: 10px;
-  padding-bottom: 10px; */
 }
 
 .option h3 {
@@ -162,12 +179,26 @@
 }
 
 .oauth-btns #google {
+  transition: background-color 250ms ease-in;
   background-color: var(--google-red);
 }
 
-.oauth-btns #facebook {
-  margin-top: var(--top-bottom-margin);
-  background-color: var(--facebook-blue);
+.oauth-btns #google:hover {
+  background-color: #f5594e;
+}
+
+.message-container {
+  width: 100%;
+}
+
+.message-container .error {
+  padding: 0.75rem;
+  background-color: rgb(245, 216, 216);
+  border-radius: 3px;
+}
+
+.error p {
+  color: rgb(204, 34, 34);
 }
 
 .about-container {
@@ -279,6 +310,7 @@
   }
 
   .about-body .about-action-btn {
+    transition: all 250ms ease-in-out;
     display: inline-block;
     color: var(--logo-color);
     margin-top: 25px;
@@ -286,6 +318,11 @@
     text-decoration: none;
     border: 2px solid var(--logo-color);
     border-radius: 25px;
+  }
+
+  .about-body .about-action-btn:hover {
+    background-color: var(--logo-color);
+    color: #c9bbfe;
   }
 
   .oauth-container .oauth-btns {

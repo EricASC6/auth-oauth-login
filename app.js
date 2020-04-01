@@ -15,9 +15,9 @@ const MongoStore = require("connect-mongo")(session);
 const cookieParser = require("cookie-parser");
 const accountRoutes = require("./routes/account-routes");
 const authRoutes = require("./auth/auth-routes");
-require("./auth/configs/local");
+require("./auth/configs/local").config(passport);
 require("./auth/configs/google");
-require("./auth/configs/serialization").config();
+require("./auth/configs/serialization").config(passport);
 
 const db = mongoose.connection;
 
@@ -31,38 +31,42 @@ db.on("error", err => console.log(`connection error: ${err}`));
 const app = express();
 app.set("view engine", "ejs");
 
+const sessionStore = new MongoStore({
+  mongooseConnection: db
+});
+sessionStore.clear();
 app.use(cookieParser(SECRET));
 app.use(
   session({
     secret: SECRET,
     name: "id",
-    store: new MongoStore({
-      mongooseConnection: db
-    }),
+    store: sessionStore,
     resave: false,
-    saveUninitialized: false,
-    cookie: {}
+    saveUninitialized: false
   })
 );
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, "public")));
-
 app.use((req, res, next) => {
-  if (req.isUnauthenticated()) {
-    console.log("USER IS NOT AUTHENTICATED");
-    res.locals.user = null;
-    res.clearCookie("id");
-  } else {
+  console.log("SESSION ID", req.signedCookies);
+  sessionStore.all((_, sessions) => console.log("sessions: ", sessions));
+  console.log("SESSION USER", req.session.user);
+  if (req.isAuthenticated()) {
     console.log("USER IS AUTHENTICATED");
     res.locals.user = req.user;
+  } else {
+    console.log("USER IS NOT AUTHENTICATED");
+    res.locals.user = null;
   }
   next();
 });
 
-const isAuthenticated = async (req, res, next) => {
+const isAuthenticated = (req, res, next) => {
   console.log("cookie id", req.signedCookies.id);
-  if (req.isAuthenticated()) return next();
+  if (req.isAuthenticated()) {
+    return next();
+  }
   return res.redirect("/account/login");
 };
 

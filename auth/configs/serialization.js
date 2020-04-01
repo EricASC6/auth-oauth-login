@@ -1,13 +1,11 @@
-const passport = require("passport");
+module.exports.config = passport => {
+  passport.serializeUser((user, done) => {
+    console.log("SERIALIZING USER", user);
+    done(null, user);
+  });
 
-module.exports = {
-  config() {
-    passport.serializeUser((user, done) => {
-      done(null, user);
-    });
-
-    passport.deserializeUser(async (user, done) => {
-      done(null, user);
-    });
-  }
+  passport.deserializeUser((user, done) => {
+    console.log("DESERIALIZING USER", user);
+    done(null, user);
+  });
 };

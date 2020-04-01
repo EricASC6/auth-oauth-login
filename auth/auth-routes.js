@@ -1,26 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const Authenticator = require("./authHandler");
+const passport = require("passport");
 
 router.use(express.urlencoded({ extended: true }));
 
 // Local Strategy
 const localSignupStategyOptions = {
-  successRedirect: "/",
   failureRedirect: "/account/signup"
 };
 
 const localLoginStrategyOptions = {
-  successRedirect: "/",
   failureRedirect: "/account/login"
 };
 
-const localAuthenticator = new Authenticator("local:signup", "local:login");
-const localSignup = localAuthenticator.signup(localSignupStategyOptions);
-const localLogin = localAuthenticator.login(localLoginStrategyOptions);
-
-router.post("/signup", localSignup);
-router.post("/login", localLogin);
+router.post("/signup");
+router.post(
+  "/login",
+  passport.authenticate("local:login", localLoginStrategyOptions),
+  (req, res) => {
+    console.log("USER", req.user);
+    res.redirect("/");
+  }
+);
 
 // Google Strategy
 const googleSignupStrategyOptions = {
@@ -43,34 +44,16 @@ const googleLoginStrategyOptions = {
   ...localLoginStrategyOptions
 };
 
-const googleAuthenticator = new Authenticator("google:signup", "google:login");
-const googleSignup = googleAuthenticator.signup(googleSignupStrategyOptions);
-const googleLogin = googleAuthenticator.login(googleLoginStrategyOptions);
+// router.get("/google/signup", googleSignup);
+// router.get("/google/signup/redirect", googleSignup);
+// router.get("/google/login", googleLogin);
+// router.get("/google/login/redirect", googleLogin);
 
-router.get("/google/signup", googleSignup);
-router.get("/google/signup/redirect", googleSignup);
-router.get("/google/login", googleLogin);
-router.get("/google/login/redirect", googleLogin);
-
-// Facebook Strategy
-const facebookStrategySignupOptions = {
-  scope: ["emails"],
-  ...localSignupStategyOptions
-};
-
-const facebookAuthenticator = new Authenticator(
-  "facebook:signup",
-  "facebook:login"
-);
-
-const facebookSignup = facebookAuthenticator.signup(
-  facebookStrategySignupOptions
-);
-
-router.get("/facebook/signup", facebookSignup);
-router.get("/facebook/signup/redirect", facebookSignup);
-
-const logout = localAuthenticator.logout();
-router.get("/logout", logout);
+router.get("/logout", (req, res) => {
+  req.session.destroy(err => {
+    req.logOut();
+    res.redirect("/account/login");
+  });
+});
 
 module.exports = router;

@@ -10,10 +10,9 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/signup/redirect",
-      passReqToCallback: true
+      callbackURL: "/auth/google/signup/redirect"
     },
-    async (req, accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       console.log("signing up with google");
       console.log("access token", accessToken);
       console.log("refresh token", refreshToken);
@@ -66,10 +65,9 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/login/redirect",
-      passReqToCallback: true
+      callbackURL: "/auth/google/login/redirect"
     },
-    async (req, accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       console.log("loginning in with google");
       console.log("access token", accessToken);
       console.log("refresh token", refreshToken);

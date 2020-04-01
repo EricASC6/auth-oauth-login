@@ -1,2 +1,2 @@
 # auth-oauth-login
-Login authentication and authorization with passport local, google oauth2, and facebook strategy.
+Login authentication with passport local and google oauth2 strategy with sessions.
